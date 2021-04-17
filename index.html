@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jQuery for student information</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="./jqueryassignmentdummydata.json"></script>
+    <script src="./jQueryComponents.js"></script>
+  </head>
+  <body>
+    <div>
+      <button class="btn" id="prev">prev page</button>
+      <button class="btn" id="next">next page</button>
+      Choose number of records to display:
+      <select class="displayOption" id="displayRow">
+        <option>10</option>
+        <option>20</option>
+        <option>50</option>
+        <option>100</option>
+      </select>
+
+      <br /><br />
+      <table style="width: 100%">
+        <thead>
+          <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Location</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Marks</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </body>
+</html>
