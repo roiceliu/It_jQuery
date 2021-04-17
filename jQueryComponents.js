@@ -22,11 +22,17 @@ $(document).ready(function () {
     reloadTable();
   });
 });
-//FIXME: display needs to be fixed: display number of records
+
+//field to add student record to the local storage: address ==> drag drop multiple input
+function addRecord() {
+  //get all students input
+}
+
 function display(DisplayNum) {
   DisplayNum = DisplayNum === undefined ? 10 : DisplayNum;
   var arr = JSON.parse(localStorage.getItem("studentData"));
 
+  //contruct table view
   for (let i = 0; i < DisplayNum; i++) {
     let val = arr[i];
 
@@ -137,19 +143,35 @@ function save_row(i) {
   let fn = $("#fn_text" + i).val();
 
   $("#fn" + i).html(fn);
+
+  //save new record to local storage
+  var arr = JSON.parse(localStorage.getItem("studentData"));
+  arr[i].firstname = $("#fn" + i).text();
+  localStorage.setItem("studentData", JSON.stringify(arr));
 }
 
-//remove in local storage as well
+//remove in local storage
 function delete_row(i) {
   $("#row" + i).hide();
   var arr = JSON.parse(localStorage.getItem("studentData"));
+  //delete record in storage & update table
   arr.splice(i, 1);
   localStorage.setItem("studentData", JSON.stringify(arr));
   reloadTable();
 }
 
+//reload table view after changes
 function reloadTable() {
   $("tbody").empty(); //clear previous table
   var DisplayNum = $("#displayRow option:selected").text();
   display(DisplayNum);
+}
+
+function getStorageData() {
+  return JSON.parse(localStorage.getItem("studentData"));
+}
+
+function SetStorageData(arr) {
+  localStorage.setItem("studentData", JSON.stringify(arr));
+  return;
 }

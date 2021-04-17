@@ -8,8 +8,23 @@
   </head>
   <body>
     <div>
-      <button class="btn" id="prev">prev page</button>
-      <button class="btn" id="next">next page</button>
+      <form>
+        <h3>Add new record</h3>
+        First Name: <input type="text" id="fn_add" /> Last Name:
+        <input type="text" id="ln_add" /> Email:
+        <input type="email" id="email_add" />
+        <!-- TODO: address needs to use GEO to drag & drop -->
+        <!-- Location: <input type="text" id="location_add" />  -->
+        Phone: <input type="tel" id="phone_add" />
+
+        <!-- TODO: marks & address needs to input different -->
+      </form>
+
+      <br /><br />
+
+      <!-- <button class="btn" id="prev">prev page</button>
+      <button class="btn" id="next">next page</button> -->
+      <h3>Student Records</h3>
       Choose number of records to display:
       <select class="displayOption" id="displayRow">
         <option>10</option>
@@ -18,7 +33,6 @@
         <option>100</option>
       </select>
 
-      <br /><br />
       <table style="width: 100%">
         <thead>
           <tr>
