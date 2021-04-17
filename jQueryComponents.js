@@ -24,8 +24,19 @@ $(document).ready(function () {
 });
 
 //field to add student record to the local storage: address ==> drag drop multiple input
+//TODO: add locations & multiple records field
 function addRecord() {
-  //get all students input
+  let newRecord = {};
+  newRecord.firstname = $("#fn_add").val();
+  newRecord.lastname = $("#ln_add").val();
+  newRecord.email = $("#email_add").val();
+  newRecord.phone = $("#phone_add").val();
+
+  const arr = getStorageData();
+  arr.push(newRecord);
+  // arr.unshift(newRecord) //TEST
+  SetStorageData(arr);
+  reloadTable();
 }
 
 function display(DisplayNum) {
