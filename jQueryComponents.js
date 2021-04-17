@@ -21,24 +21,11 @@ $(document).ready(function () {
   $("#displayRow").change(function () {
     reloadTable();
   });
+
+  searchRecord();
 });
 
-//field to add student record to the local storage: address ==> drag drop multiple input
-//TODO: add locations & multiple records field
-function addRecord() {
-  let newRecord = {};
-  newRecord.firstname = $("#fn_add").val();
-  newRecord.lastname = $("#ln_add").val();
-  newRecord.email = $("#email_add").val();
-  newRecord.phone = $("#phone_add").val();
-
-  const arr = getStorageData();
-  arr.push(newRecord);
-  // arr.unshift(newRecord) //TEST
-  SetStorageData(arr);
-  reloadTable();
-}
-
+//display table view
 function display(DisplayNum) {
   DisplayNum = DisplayNum === undefined ? 10 : DisplayNum;
   var arr = JSON.parse(localStorage.getItem("studentData"));
@@ -119,6 +106,35 @@ function display(DisplayNum) {
   }
 }
 
+//field to add student record to the local storage: address ==> drag drop multiple input
+//TODO: add locations & multiple records field
+function addRecord() {
+  let newRecord = {};
+  newRecord.firstname = $("#fn_add").val();
+  newRecord.lastname = $("#ln_add").val();
+  newRecord.email = $("#email_add").val();
+  newRecord.phone = $("#phone_add").val();
+
+  //FIXME: check if record has important fields filled or not
+  const arr = getStorageData();
+  arr.push(newRecord);
+  // arr.unshift(newRecord) //TEST
+  SetStorageData(arr);
+  reloadTable();
+}
+
+//TODO: search only 4 fields instead of all
+function searchRecord() {
+  $("#searchBar").on("keyup", function () {
+    var value = $(this).val().toLowerCase();
+    console.log("search", value);
+    $("#myTb tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  });
+}
+
+//show more details of the record
 function showMore_row(i) {
   $("#markField").show();
   $("#mark" + i).show();
@@ -126,33 +142,51 @@ function showMore_row(i) {
 }
 
 //edit the table record for row i
+// TODO & FIXME: add multiple fields of edit in addr & marks &Locations
 function edit_row(i) {
   $(".saveBtn").show();
   $(".editBtn").hide();
 
   //set current row's content ==> input
   let fn = $("#fn" + i).html();
-  // var ln = $("#ln " + i).html();
-  // var email = $("#email " + i).html();
-  // var location = $("#location" + i).html();
-  // var phone = $("#phone " + i).html();
-  // var addr = $("#addr " + i).html();
-  // var mark = $('#mark' + i).html();
+  // var ln = $("#ln" + i).html();
+  // var email = $("#email" + i).html();
+  // // var location = $("#location" + i).html();
+  // var phone = $("#phone" + i).html();
+  // var addr = $("#addr" + i).html();
+  // var mark = $("#mark" + i).html();
 
   //create a new content for table row
   $("#fn" + i).html(
     "<input type='text' id='fn_text" + i + "' value = '" + fn + "'> "
   );
+  // $("#ln" + i).html(
+  //   "<input type='text' id='ln_text" + i + "' value = '" + ln + "'> "
+  // );
+  // $("#email" + i).html(
+  //   "<input type='email' id='email_text" + i + "' value = '" + email + "'> "
+  // );
+  // // $("#location" + i).html(
+  // //   "<input type='text' id='location_text" + i + "' value = '" + location + "'> "
+  // // );
+  // $("#phone" + i).html(
+  //   "<input type='tel' id='phone_text" + i + "' value = '" + phone + "'> "
+  // );
 }
 
 //also save to the localStorage
+//FIXME: so much repeated code - optimize it
 function save_row(i) {
   $(".saveBtn").hide();
   $(".editBtn").show();
 
   //get data from user input(new table row) --> current display
   let fn = $("#fn_text" + i).val();
+  // let ln = $("#ln_text" + i).val();
+  // let email = $("#email_text" + i).val();
+  // let phone = $("#phone_text" + i).val();
 
+  //update data
   $("#fn" + i).html(fn);
 
   //save new record to local storage
@@ -161,7 +195,7 @@ function save_row(i) {
   localStorage.setItem("studentData", JSON.stringify(arr));
 }
 
-//remove in local storage
+//remove record in local storage & tabele view
 function delete_row(i) {
   $("#row" + i).hide();
   var arr = JSON.parse(localStorage.getItem("studentData"));
@@ -178,10 +212,12 @@ function reloadTable() {
   display(DisplayNum);
 }
 
+//get storage by returning an JSON object array
 function getStorageData() {
   return JSON.parse(localStorage.getItem("studentData"));
 }
 
+//set local storage
 function SetStorageData(arr) {
   localStorage.setItem("studentData", JSON.stringify(arr));
   return;

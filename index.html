@@ -8,14 +8,20 @@
   </head>
   <body>
     <div>
+      <div class="search">
+        <h3>Search student record with any keys</h3>
+        <p>Like: First Name, last Name, Phone, Location</p>
+        <input type="text" id="searchBar" placeholder="Search..." />
+      </div>
+
       <div class="addNewRecord">
         <h3>Add new record</h3>
-        First Name: <input type="text" id="fn_add" /> Last Name:
-        <input type="text" id="ln_add" /> Email:
-        <input type="email" id="email_add" />
+        First Name: <input type="text" id="fn_add" required /> Last Name:
+        <input type="text" id="ln_add" required /> Email:
+        <input type="email" id="email_add" required />
         <!-- TODO: address needs to use GEO to drag & drop -->
         <!-- Location: <input type="text" id="location_add" />  -->
-        Phone: <input type="tel" id="phone_add" />
+        Phone: <input type="tel" id="phone_add" required />
         <button class="add" onclick="addRecord()">Add Student</button>
         <!-- TODO: marks & address needs to input different -->
       </div>
@@ -47,7 +53,7 @@
             <th></th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody id="myTb"></tbody>
       </table>
     </div>
   </body>
