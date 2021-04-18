@@ -1,4 +1,5 @@
 var dropedVal = [];
+var curr_idx = 0;
 $(document).ready(function () {
   $.getJSON("jqueryassignmentdummydata.json", function (data) {
     var arr = [];
@@ -38,16 +39,13 @@ $(document).ready(function () {
       dropedVal.push(ui.draggable.text());
     },
   });
-  //store the droppable value
 });
 
 //display table view
 //TODO: display num should only be # of records show each time, @param startIdx
 function display(DisplayNum) {
   DisplayNum = DisplayNum === undefined ? 10 : DisplayNum;
-  var arr = JSON.parse(localStorage.getItem("studentData"));
-
-  //contruct table view
+  var arr = getStorageData();
   for (let i = 0; i < DisplayNum; i++) {
     let val = arr[i];
 
@@ -123,6 +121,8 @@ function display(DisplayNum) {
   }
 }
 
+// function constructTable(start_idx, numRow) {}
+
 //field to add student record to the local storage: address ==> drag drop multiple input
 //TODO: add locations & multiple records field
 function addRecord() {
@@ -133,6 +133,25 @@ function addRecord() {
   newRecord.phone = $("#phone_add").val();
   newRecord.location = dropedVal;
   dropedVal = [];
+
+  //addresses
+  newRecord.address = {};
+  newRecord.address.communication = $("#communication_add").val();
+  newRecord.address.permanent = $("#permanent_add").val();
+  //marks
+  newRecord.marks = {};
+  newRecord.marks.english = $("#english_add").val();
+  newRecord.marks.science = $("#science_add").val();
+  newRecord.marks.computers = $("#computers_add").val();
+  newRecord.marks.hardware = $("#hardware_add").val();
+
+  //clear input field
+  $(".addNewRecord")
+    .find("input")
+    .each(function () {
+      $(this).val("");
+    });
+
   //FIXME: check if record has important fields filled or not
   const arr = getStorageData();
   // arr.push(newRecord);
@@ -145,8 +164,7 @@ function addRecord() {
 function searchRecord() {
   $("#searchBar").on("keyup", function () {
     var value = $(this).val().toLowerCase();
-    console.log("search", value);
-    $("#myTb tr").filter(function () {
+    $("#myTb>tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
     });
   });
@@ -159,7 +177,6 @@ function infinityScroll() {
       $(document).height() - $(window).height() - 50 <
       $(window).scrollTop()
     ) {
-      // alert("at bottom");
     }
   });
 }

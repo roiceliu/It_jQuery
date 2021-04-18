@@ -12,13 +12,6 @@
   </head>
   <body>
     <div>
-      <div class="search">
-        <h3>Search student record with any keys</h3>
-        <p>Like: First Name, last Name, Phone, Location</p>
-        <input type="text" id="searchBar" placeholder="Search..." />
-        <!-- <button id="search_btn" onclick="searchRecord()">Search</button> -->
-      </div>
-
       <div class="addNewRecord">
         <h3>Add new record</h3>
         First Name: <input type="text" id="firstname_add" required />
@@ -44,25 +37,40 @@
         </ul>
 
         <hr />
-        <h4>Address</h4>
-        communication: <input type="text" id="communication_add" /> permanent:
-        <input type="text" id="permanent_add" />
+        <div id="address_add">
+          <h4>Address</h4>
+          communication: <input type="text" id="communication_add" /> permanent:
+          <input type="text" id="permanent_add" />
+        </div>
+
+        <hr />
+        <div id="marks_add">
+          <h4>Marks</h4>
+          English: <input type="number" id="english_add" /> Science:<input
+            type="text"
+            id="science_add"
+          />
+          Computers: <input type="number" id="computers_add" /> Hardware:<input
+            type="text"
+            id="hardware_add"
+          />
+        </div>
+
         <hr />
 
-        <h4>Marks</h4>
-        English: <input type="number" id="english_add" /> Science:<input
-          type="text"
-          id="science_add"
-        />
-        Computers: <input type="number" id="computers_add" /> HardWare:<input
-          type="text"
-          id="hardware_add"
-        />
-        <hr />
         <button class="add" onclick="addRecord()">Add Student</button>
         <!-- TODO: marks & address needs to input different -->
       </div>
 
+      <br /><br />
+
+      <div class="search">
+        <h3>Search student record with any keys</h3>
+        <!-- <span>Like: First Name, last Name, Phone, Location</span> -->
+
+        <input type="text" id="searchBar" placeholder="Search..." />
+        <!-- <button id="search_btn" onclick="searchRecord()">Search</button> -->
+      </div>
       <br /><br />
 
       <!-- <button class="btn" id="prev">prev page</button>
