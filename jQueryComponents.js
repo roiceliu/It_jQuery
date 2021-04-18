@@ -1,3 +1,4 @@
+var dropedVal = [];
 $(document).ready(function () {
   $.getJSON("jqueryassignmentdummydata.json", function (data) {
     var arr = [];
@@ -26,18 +27,22 @@ $(document).ready(function () {
   searchRecord();
 
   //endless scroll
-  $(window).scroll(function () {
-    //check if it's at the bottom of the page: this is the window
-    if (
-      $(document).height() - $(window).height() - 50 <
-      $(window).scrollTop()
-    ) {
-      // alert("at bottom");
-    }
+  infinityScroll();
+
+  //drag & drop
+
+  $("#locationOps>li").draggable();
+  $("#locationOps>li").css("display", "inline-block");
+  $("input").droppable({
+    drop: function (event, ui) {
+      dropedVal.push(ui.draggable.text());
+    },
   });
+  //store the droppable value
 });
 
 //display table view
+//TODO: display num should only be # of records show each time, @param startIdx
 function display(DisplayNum) {
   DisplayNum = DisplayNum === undefined ? 10 : DisplayNum;
   var arr = JSON.parse(localStorage.getItem("studentData"));
@@ -60,27 +65,27 @@ function display(DisplayNum) {
     $("table tbody").append(
       "<tr id ='row" +
         i +
-        "' class = 'tbRow'><td id='fn" +
+        "' class = 'tbRow'><td class='firstname' id='firstname" +
         i +
         "'>" +
         val.firstname +
-        "</td> <td id='ln" +
+        "</td> <td class = 'lastname' id='lastname" +
         i +
         "'>" +
         val.lastname +
-        "</td> <td id='email" +
+        "</td> <td class = 'email' id='email" +
         i +
         "'> " +
         val.email +
-        "</td> <td id='location" +
+        "</td> <td class = 'location' id='location" +
         i +
         "'>" +
         val.location +
-        "</td> <td id='phone" +
+        "</td> <td class = 'phone' id='phone" +
         i +
         "'>" +
         val.phone +
-        "</td><td  id='addr" +
+        "</td><td class = 'address' id='addr" +
         i +
         "'>" +
         addressVal +
@@ -89,22 +94,22 @@ function display(DisplayNum) {
         "'>" +
         markVal +
         "</td>" +
-        "<td><button id ='showMore_btn" +
+        "<td class = 'options'><button id ='showMore_btn" +
         i +
         "' onclick= 'showMore_row(" +
         i +
-        ")'> More details </button> </td> " +
-        "<td><button class ='editBtn' id ='edit_btn" +
+        ")'> More details </button> " +
+        "<button class ='editBtn' id ='edit_btn" +
         i +
         "' onclick= 'edit_row(" +
         i +
-        ")'> Edit </button> </td> " +
-        "<td><button class = 'saveBtn' id ='save_btn" +
+        ")'> Edit </button> " +
+        "<button class = 'saveBtn' id ='save_btn" +
         i +
         "' onclick= 'save_row(" +
         i +
-        ")'> Save </button> </td> " +
-        "<td> <button  class ='deleteBtn' onclick= 'delete_row(" +
+        ")'> Save </button> " +
+        " <button  class ='deleteBtn' onclick= 'delete_row(" +
         i +
         ")'> delete </button> </td>" +
         "</tr > "
@@ -122,15 +127,16 @@ function display(DisplayNum) {
 //TODO: add locations & multiple records field
 function addRecord() {
   let newRecord = {};
-  newRecord.firstname = $("#fn_add").val();
-  newRecord.lastname = $("#ln_add").val();
+  newRecord.firstname = $("#firstname_add").val();
+  newRecord.lastname = $("#lastname_add").val();
   newRecord.email = $("#email_add").val();
   newRecord.phone = $("#phone_add").val();
-
+  newRecord.location = dropedVal;
+  dropedVal = [];
   //FIXME: check if record has important fields filled or not
   const arr = getStorageData();
-  arr.push(newRecord);
-  // arr.unshift(newRecord) //TEST
+  // arr.push(newRecord);
+  arr.unshift(newRecord); //TEST
   SetStorageData(arr);
   reloadTable();
 }
@@ -146,6 +152,18 @@ function searchRecord() {
   });
 }
 
+function infinityScroll() {
+  $(window).scroll(function () {
+    //check if it's at the bottom of the page: this is the window
+    if (
+      $(document).height() - $(window).height() - 50 <
+      $(window).scrollTop()
+    ) {
+      // alert("at bottom");
+    }
+  });
+}
+
 //show more details of the record
 function showMore_row(i) {
   $("#markField").show();
@@ -156,55 +174,78 @@ function showMore_row(i) {
 //edit the table record for row i
 // TODO & FIXME: add multiple fields of edit in addr & marks &Locations
 function edit_row(i) {
-  $(".saveBtn").show();
-  $(".editBtn").hide();
+  $("#save_btn" + i).show();
+  $("#edit_btn" + i).hide();
 
-  //set current row's content ==> input
-  let fn = $("#fn" + i).html();
-  // var ln = $("#ln" + i).html();
-  // var email = $("#email" + i).html();
-  // // var location = $("#location" + i).html();
-  // var phone = $("#phone" + i).html();
-  // var addr = $("#addr" + i).html();
-  // var mark = $("#mark" + i).html();
-
-  //create a new content for table row
-  $("#fn" + i).html(
-    "<input type='text' id='fn_text" + i + "' value = '" + fn + "'> "
-  );
-  // $("#ln" + i).html(
-  //   "<input type='text' id='ln_text" + i + "' value = '" + ln + "'> "
-  // );
-  // $("#email" + i).html(
-  //   "<input type='email' id='email_text" + i + "' value = '" + email + "'> "
-  // );
-  // // $("#location" + i).html(
-  // //   "<input type='text' id='location_text" + i + "' value = '" + location + "'> "
-  // // );
-  // $("#phone" + i).html(
-  //   "<input type='tel' id='phone_text" + i + "' value = '" + phone + "'> "
-  // );
+  //select every table field at record (rowi) to get their input
+  $("#row" + i)
+    .children("td")
+    .each(function () {
+      var className = $(this).attr("class");
+      // if the td is option, skip
+      if (className === "options") {
+        return true;
+      }
+      // if td is for location
+      else if (className === "location") {
+      } else if (className === "address") {
+        //set current row's content ==> input
+        let userInput = $(this).html();
+      } else if (className === "markOption") {
+      } else {
+        //For firstname, lastname, email, phone
+        let type = "text";
+        if (className === "email") {
+          type = "email";
+        }
+        if (className === "phone") {
+          type = "tel";
+        }
+        //set current row's content ==> input
+        let userInput = $(this).html();
+        $(this).html(
+          "<input type='" +
+            type +
+            "' id='" +
+            className +
+            "_text" +
+            i +
+            "' value = '" +
+            userInput +
+            "'> "
+        );
+      }
+    });
 }
 
 //also save to the localStorage
 //FIXME: so much repeated code - optimize it
 function save_row(i) {
-  $(".saveBtn").hide();
-  $(".editBtn").show();
+  $("#save_btn" + i).hide();
+  $("#edit_btn" + i).show();
+  var arr = getStorageData();
 
   //get data from user input(new table row) --> current display
-  let fn = $("#fn_text" + i).val();
-  // let ln = $("#ln_text" + i).val();
-  // let email = $("#email_text" + i).val();
-  // let phone = $("#phone_text" + i).val();
-
-  //update data
-  $("#fn" + i).html(fn);
+  $("#row" + i)
+    .children("td")
+    .each(function () {
+      var className = $(this).attr("class");
+      if (className === "options") {
+        return true;
+      }
+      // if td is for location
+      else if (className === "location") {
+      } else if (className === "address") {
+      } else if (className === "markOption") {
+      } else {
+        //set current row's input => content
+        let userInput = $(this).children("input").val();
+        $(this).html(userInput);
+      }
+    });
 
   //save new record to local storage
-  var arr = JSON.parse(localStorage.getItem("studentData"));
-  arr[i].firstname = $("#fn" + i).text();
-  localStorage.setItem("studentData", JSON.stringify(arr));
+  saveRow(i);
 }
 
 //remove record in local storage & tabele view
@@ -233,4 +274,17 @@ function getStorageData() {
 function SetStorageData(arr) {
   localStorage.setItem("studentData", JSON.stringify(arr));
   return;
+}
+
+//OPTME: optimize in the future --  loop to save properties in an object
+function saveRow(i) {
+  var arr = getStorageData();
+  arr[i].firstname = $("#firstname" + i).text();
+  arr[i].lastname = $("#lastname" + i).text();
+  arr[i].email = $("#email" + i).text();
+  arr[i].phone = $("#phone" + i).text();
+  // arr[i].location = $("#location" + i).text();
+  // arr[i].address = $("#address" + i).text();
+  // arr[i].marks = $('#markOption'+ i).text()
+  SetStorageData(arr);
 }
