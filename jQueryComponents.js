@@ -22,7 +22,19 @@ $(document).ready(function () {
     reloadTable();
   });
 
+  //search the record
   searchRecord();
+
+  //endless scroll
+  $(window).scroll(function () {
+    //check if it's at the bottom of the page: this is the window
+    if (
+      $(document).height() - $(window).height() - 50 <
+      $(window).scrollTop()
+    ) {
+      // alert("at bottom");
+    }
+  });
 });
 
 //display table view
