@@ -9,56 +9,60 @@
     ></script>
     <script src="./jqueryassignmentdummydata.json"></script>
     <script src="./jQueryComponents.js"></script>
+    <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
     <div>
       <div class="addNewRecord">
-        <h3>Add new record</h3>
-        First Name: <input type="text" id="firstname_add" required />
-        <hr />
-        Last Name:
-        <input type="text" id="lastname_add" required />
-        <hr />
-        Email:
-        <input type="email" id="email_add" required />
-        <hr />
-        <!-- TODO: address needs to -->
-        Phone: <input type="tel" id="phone_add" required />
-        <hr />
-        Location:<input
-          type="text"
-          id="location_add"
-          style="width: 200px; height: 30px"
-        />
+        <h2>Add New Record</h2>
+        <div class="row">
+          <div class="col">
+            First Name: <input type="text" id="firstname_add" required />
 
-        <ul id="locationOps">
-          <li id="Piscataway_drag">Piscataway</li>
-          <li id="NewYork_drag">New York</li>
-        </ul>
+            Last Name:
+            <input type="text" id="lastname_add" required />
 
-        <hr />
-        <div id="address_add">
-          <h4>Address</h4>
-          communication: <input type="text" id="communication_add" /> permanent:
-          <input type="text" id="permanent_add" />
+            Email:
+            <input type="email" id="email_add" required />
+
+            <!-- TODO: address needs to -->
+            Phone: <input type="tel" id="phone_add" required />
+
+            Location:<input type="text" id="location_add" />
+
+            <ul id="locationOps">
+              <li id="Piscataway_drag">Piscataway</li>
+              <li id="NewYork_drag">New York</li>
+            </ul>
+          </div>
+
+          <div class="col">
+            <div id="address_add">
+              <h4>Address</h4>
+              <div>
+                communication:
+                <input type="text" id="communication_add" /> permanent:
+                <input type="text" id="permanent_add" />
+              </div>
+            </div>
+
+            <div id="marks_add">
+              <h4>Marks</h4>
+              <div>
+                English: <input type="number" id="english_add" /> Science:<input
+                  type="text"
+                  id="science_add"
+                />
+                Computers:
+                <input type="number" id="computers_add" /> Hardware:<input
+                  type="text"
+                  id="hardware_add"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-
-        <hr />
-        <div id="marks_add">
-          <h4>Marks</h4>
-          English: <input type="number" id="english_add" /> Science:<input
-            type="text"
-            id="science_add"
-          />
-          Computers: <input type="number" id="computers_add" /> Hardware:<input
-            type="text"
-            id="hardware_add"
-          />
-        </div>
-
-        <hr />
-
-        <button class="add" onclick="addRecord()">Add Student</button>
+        <button class="add btn" onclick="addRecord()">Add Student</button>
         <!-- TODO: marks & address needs to input different -->
       </div>
 
@@ -75,31 +79,36 @@
 
       <!-- <button class="btn" id="prev">prev page</button>
       <button class="btn" id="next">next page</button> -->
-      <h3>Student Records</h3>
-      Choose number of records to display:
-      <select class="displayOption" id="displayRow">
-        <option>10</option>
-        <option>20</option>
-        <option>50</option>
-        <option>100</option>
-      </select>
+      <div class="tablePart">
+        <h3>Student Records</h3>
+        <div>
+          Choose number of records to display:
+          <select class="displayOption" id="displayRow">
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
 
-      <table style="width: 100%">
-        <thead>
-          <tr>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-            <th>Location</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th id="markField">Marks</th>
-            <th>Option</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="myTb"></tbody>
-      </table>
+            <option>100</option>
+          </select>
+        </div>
+
+        <table style="width: 100%">
+          <thead>
+            <tr>
+              <th>Firstname</th>
+              <th>Lastname</th>
+              <th>Email</th>
+              <th>Location</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th id="markField">Marks</th>
+              <th>Option</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="myTb"></tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>

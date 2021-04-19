@@ -31,12 +31,16 @@ $(document).ready(function () {
   infinityScroll();
 
   //drag & drop
-
-  $("#locationOps>li").draggable();
-  $("#locationOps>li").css("display", "inline-block");
-  $("input").droppable({
+  $("#locationOps>li").draggable({
+    stack: "#locationOps li",
+    revert: "true",
+  });
+  // $("#locationOps>li").css("display", "inline-block");
+  $("#location_add").droppable({
     drop: function (event, ui) {
       dropedVal.push(ui.draggable.text());
+      var dragElement = ui.draggable;
+      // alert("drag element:" + dragElement.text());
     },
   });
 });
@@ -45,8 +49,20 @@ $(document).ready(function () {
 //TODO: display num should only be # of records show each time, @param startIdx
 function display(DisplayNum) {
   DisplayNum = DisplayNum === undefined ? 10 : DisplayNum;
+  constructTable(0, DisplayNum);
+  curr_idx = DisplayNum;
+}
+
+function loadMore() {
+  var len = getStorageData().length;
+  let end_idx = curr_idx + 10 > len ? len : curr_idx + 10;
+  constructTable(curr_idx, end_idx);
+  curr_idx = end_idx;
+}
+
+function constructTable(start_idx, end_idx) {
   var arr = getStorageData();
-  for (let i = 0; i < DisplayNum; i++) {
+  for (let i = start_idx; i < end_idx; i++) {
     let val = arr[i];
 
     //get key-val entry from object address & marks
@@ -121,8 +137,6 @@ function display(DisplayNum) {
   }
 }
 
-// function constructTable(start_idx, numRow) {}
-
 //field to add student record to the local storage: address ==> drag drop multiple input
 //TODO: add locations & multiple records field
 function addRecord() {
@@ -177,6 +191,14 @@ function infinityScroll() {
       $(document).height() - $(window).height() - 50 <
       $(window).scrollTop()
     ) {
+      var len = getStorageData().length;
+      if (curr_idx < len) {
+        loadMore();
+      } else {
+        //kill scroll process
+        $(".tablePart").append("<h5> No more records </h5>");
+        $(window).unbind("scroll");
+      }
     }
   });
 }
@@ -272,7 +294,7 @@ function delete_row(i) {
   //delete record in storage & update table
   arr.splice(i, 1);
   localStorage.setItem("studentData", JSON.stringify(arr));
-  reloadTable();
+  // reloadTable();
 }
 
 //reload table view after changes
